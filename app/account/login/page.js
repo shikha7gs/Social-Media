@@ -15,7 +15,7 @@ export default function Login() {
             <Input type="text" placeholder="Email" />
             <Input type="password" placeholder="Password" />
             <Button variant="outline">Log In</Button>
-            <Link className="mt-5" href={"/account/reset-password"}>Forget Password?</Link>
+            <Link className="mt-5" href={"/account/forget-password"}>Forget Password?</Link>
           </form>
         </div>
         <div className="border flex justify-center items-center w-full m-5 py-7 ">
