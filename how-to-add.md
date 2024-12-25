@@ -10,3 +10,23 @@
   - use - `toast({
       description: '✅ Otp sent successfully'
     })`
+
+## Redirect for authenticate or non.
+ - use - `useEffect(()=>{
+    (async()=>{
+      const req1= await fetch("/api/account/checkAuthenticate", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify()
+      })
+      const res1= await req1.json()
+      if(res1.authenticated){
+        console.log("live")
+        redirect("/user/profile")
+      }else{
+        console.log("leave")
+      }
+    })()
+  },[])`
