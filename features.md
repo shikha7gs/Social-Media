@@ -9,3 +9,6 @@
 
  ### Forget Pass:
  - Send otp and return uuid then verify using uuid then add cookie with session id and redirect
+
+ ### Rate limit:
+ - Added rate limit in every api except check username

@@ -4,12 +4,14 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { Session } from "@/lib/model/Session";
+import { rateLimit } from "@/lib/rateLimit";
 
 export async function POST(req) {
     try {
+        const isAllowed = await rateLimit(req,"login");
+        if (!isAllowed) return NextResponse.json({success:false,message:"Too many requests, try 5 minutes later"});
         const { emailOrUsername, password } = await req.json();
         await connectDb();
-
         const findUser = await User.findOne({
             $or: [
                 { email: emailOrUsername },

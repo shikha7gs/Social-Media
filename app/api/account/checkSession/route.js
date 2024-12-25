@@ -1,8 +1,11 @@
 import { Session } from "@/lib/model/Session";
+import { rateLimit } from "@/lib/rateLimit";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
     try {
+        const isAllowed = await rateLimit(req, "checkSession");
+        if (!isAllowed) return NextResponse.json({ success: false, message: "Too many requests, your account will be unlocked after 5 minutes", redirect: "/rest" });
         const sessionId = req.cookies.get('sessionId');
         if (!sessionId) return NextResponse.json({ success: false, message: "Not authenticated" })
         const findSession = await Session.findOne({ sessionId: sessionId.value })

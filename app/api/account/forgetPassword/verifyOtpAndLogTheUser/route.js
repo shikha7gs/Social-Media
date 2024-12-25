@@ -2,11 +2,14 @@ import { Otp } from "@/lib/model/Otp"
 import { Session } from "@/lib/model/Session";
 import { User } from "@/lib/model/User";
 import connectDb from "@/lib/mongoose"
+import { rateLimit } from "@/lib/rateLimit";
 import { NextResponse } from "next/server"
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req) {
     try {
+        const isAllowed = await rateLimit(req, "login");
+        if (!isAllowed) return NextResponse.json({ success: false, message: "Too many requests, try again after 5 minutes" });
         const { emailOrUserName, uuid, otp } = await req.json()
         await connectDb()
         const verifyOtp = await Otp.findOne({ uuid: uuid })
