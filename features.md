@@ -5,4 +5,4 @@
 ### log in:
  - Verify every parameter in frontend and back end.
  - Compare password using bcrypt.compare
- - Generated a session id with username linked and set in cookie with ip and user device
+ - Generated a session id with username linked and set in cookie with ip and user device for knowing that user is there then expire after 24 hr.

@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { redirect } from "next/navigation"
 
 
 export default function Login() {
@@ -38,6 +39,7 @@ export default function Login() {
     setEmailOrUsername("")
     setPassword("")
     alert("logged in")
+    redirect("/user/profile")
   }
 
   useEffect(() => {
