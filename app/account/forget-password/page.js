@@ -79,6 +79,25 @@ const page = () => {
     }
   }
 
+  useEffect(()=>{
+      (async()=>{
+        const req1= await fetch("/api/account/checkAuthenticate", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify()
+        })
+        const res1= await req1.json()
+        if(res1.authenticated){
+          console.log("live")
+          redirect("/user/profile")
+        }else{
+          console.log("leave")
+        }
+      })()
+    },[])
+
   return (
     <div className='justify-center items-center min-h-screen flex flex-col'>
       <div className='w-80 p-7 flex flex-col justify-center items-center border'>

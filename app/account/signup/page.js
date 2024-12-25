@@ -14,6 +14,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useToast } from "@/hooks/use-toast"
+import { redirect } from 'next/navigation'
 
 const page = () => {
   const [email, setEmail] = useState("")
@@ -22,8 +23,8 @@ const page = () => {
   const [userName, setUserName] = useState("")
   const [userNameAvailability, setUserNameAvailability] = useState()
   const [error, setError] = useState(true)
-  const [wait,setWait]=useState(false)
-  const {toast} = useToast()
+  const [wait, setWait] = useState(false)
+  const { toast } = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -73,6 +74,25 @@ const page = () => {
     })()
   }, [userName])
 
+  useEffect(() => {
+    (async () => {
+      const req1 = await fetch("/api/account/checkAuthenticate", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify()
+      })
+      const res1 = await req1.json()
+      if (res1.authenticated) {
+        console.log("live")
+        redirect("/user/profile")
+      } else {
+        console.log("leave")
+      }
+    })()
+  }, [])
+
 
   useEffect(() => {
     function isValidEmail(email) {
@@ -96,7 +116,7 @@ const page = () => {
       setError(true)
     }
   }, [userName, email, password, fullName, userNameAvailability])
-  
+
   return (
     <div className='flex flex-col min-h-screen items-center justify-center'>
       <div className='flex flex-col w-90 gap-3'>

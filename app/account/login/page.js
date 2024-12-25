@@ -57,6 +57,25 @@ export default function Login() {
     }
   }, [emailOrUsername, password])
 
+  useEffect(()=>{
+      (async()=>{
+        const req1= await fetch("/api/account/checkAuthenticate", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify()
+        })
+        const res1= await req1.json()
+        if(res1.authenticated){
+          console.log("live")
+          redirect("/user/profile")
+        }else{
+          console.log("leave")
+        }
+      })()
+    },[])
+    
   return (
     <div className="flex justify-center min-h-screen items-center">
       <div className="flex w-90 flex-col justify-center items-center">
