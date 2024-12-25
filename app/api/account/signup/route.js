@@ -15,7 +15,7 @@ export async function POST(params) {
             userName
         })
         await newUser.save()
-        console.log(email, password, fullName, userName)
+        //console.log(email, password, fullName, userName)
         return NextResponse.json({ success: true })
     } catch (error) {
         return NextResponse.json({ success: false, message: "Something went wrong" })

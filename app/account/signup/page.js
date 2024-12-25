@@ -24,11 +24,6 @@ const page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (email == 0 || password == 0 || fullName == 0 || userName == 0) {
-      alert("All fields are madetory!")
-      return
-    }
-    // check usernames frequently
     const req1 = await fetch("/api/account/signup", {
       method: "POST",
       headers: {
