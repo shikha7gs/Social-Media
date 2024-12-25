@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { useToast } from "@/hooks/use-toast"
 
 const page = () => {
   const [email, setEmail] = useState("")
@@ -21,9 +22,12 @@ const page = () => {
   const [userName, setUserName] = useState("")
   const [userNameAvailability, setUserNameAvailability] = useState()
   const [error, setError] = useState(true)
+  const [wait,setWait]=useState(false)
+  const {toast} = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setWait(true)
     const req1 = await fetch("/api/account/signup", {
       method: "POST",
       headers: {
@@ -32,11 +36,16 @@ const page = () => {
       body: JSON.stringify({ email, password, fullName, userName })
     })
     const res1 = await req1.json()
+    setWait(false)
     if (!res1.success) {
-      alert(res1.message)
+      toast({
+        description: `❌ ${res1.message}`,
+      })
       return
     }
-    alert("You are signed up")
+    toast({
+      description: `✅ You are signed up`,
+    })
     setEmail("")
     setFullName("")
     setPassword("")
@@ -111,7 +120,7 @@ const page = () => {
               <div className={`${userNameAvailability ? "text-green-500" : "text-red-500"}`}>{userName.trim().length < 8 ? null : (userNameAvailability ? `${userName} is available` : `${userName} is not available`)}</div>
             </div>
             <div className='flex justify-center items-center gap-2'>
-              <Button disabled={error} onClick={handleSubmit} variant="outline">Sign up</Button>
+              <Button disabled={error || wait} onClick={handleSubmit} variant="outline">Sign up</Button>
               <AlertDialog>
                 <AlertDialogTrigger>Rule</AlertDialogTrigger>
                 <AlertDialogContent>

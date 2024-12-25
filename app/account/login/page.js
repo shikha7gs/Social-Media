@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
+import { useToast } from "@/hooks/use-toast"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,13 +18,14 @@ import { redirect } from "next/navigation"
 
 
 export default function Login() {
+  const {toast} = useToast()
   const [emailOrUsername, setEmailOrUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(true)
-
+  const [wait, setWait] = useState(false)
   const handleSubmit = async (e) => {
     e.preventDefault()
-
+    setWait(true)
     const req1 = await fetch("/api/account/login", {
       method: "POST",
       headers: {
@@ -32,13 +34,18 @@ export default function Login() {
       body: JSON.stringify({ emailOrUsername, password })
     })
     const res1 = await req1.json()
-    if(!res1.success){
-      alert(res1.message)
+    setWait(false)
+    if (!res1.success) {
+      toast({
+        description: `❌ ${res1.message}`,
+      })
       return
     }
     setEmailOrUsername("")
     setPassword("")
-    alert("logged in")
+    toast({
+      description: `✅ You are logged in`,
+    })
     redirect("/user/profile")
   }
 
@@ -59,7 +66,7 @@ export default function Login() {
             <Input value={emailOrUsername} onChange={(e) => { setEmailOrUsername(e.target.value) }} type="text" placeholder="Email or Username" />
             <Input value={password} onChange={(e) => { setPassword(e.target.value) }} type="password" placeholder="Password" />
             <div className='flex justify-center items-center gap-2'>
-              <Button disabled={error} onClick={handleSubmit} variant="outline">Log in</Button>
+              <Button disabled={error || wait} onClick={handleSubmit} variant="outline">Log in</Button>
               <AlertDialog>
                 <AlertDialogTrigger>Rule</AlertDialogTrigger>
                 <AlertDialogContent>

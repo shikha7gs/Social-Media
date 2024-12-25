@@ -1,8 +1,10 @@
 "use client"
 import { redirect } from 'next/navigation'
 import React, { useEffect } from 'react'
+import { useToast } from "@/hooks/use-toast"
 
 const page = () => {
+    const {toast} = useToast()
     useEffect(() => {
         (async () => {
             const req1 = await fetch("/api/account/checkSession", {
@@ -13,7 +15,7 @@ const page = () => {
                 body: JSON.stringify()
             })
             const res1 = await req1.json()
-            if (res1.success) alert("User is authenticated")
+            if (res1.success) console.log("authenticated")
             else {
                 redirect("/account/login")
             }

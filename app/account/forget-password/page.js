@@ -10,7 +10,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { redirect } from 'next/navigation'
-
+import { useToast } from "@/hooks/use-toast"
 
 const page = () => {
   const [emailOrUserName, setEmailOrUserName] = useState("")
@@ -18,9 +18,12 @@ const page = () => {
   const [uuid, setUuid] = useState("")
   const [otpSent, setOtpSent] = useState(false)
   const [otp, setOtp] = useState("")
+  const [wait, setWait] = useState(false)
+  const { toast } = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setWait(true)
     const req1 = await fetch("/api/account/forgetPassword/checkExistanceAndSendOtp", {
       method: "POST",
       headers: {
@@ -29,11 +32,16 @@ const page = () => {
       body: JSON.stringify({ emailOrUserName })
     })
     const res1 = await req1.json()
+    setWait(false)
     if (!res1.success) {
-      alert(res1.message)
+      toast({
+        description: `❌ ${res1.message}`,
+      })
       return
     }
-    alert("Sent OTP")
+    toast({
+      description: `✅ Otp sent successfully`,
+    })
     setUuid(res1.uuid)
     setOtpSent(true)
   }
@@ -48,6 +56,7 @@ const page = () => {
 
   const onSubmitOtp = async (e) => {
     e.preventDefault()
+    setWait(true)
     console.log(otp)
     const req1 = await fetch("/api/account/forgetPassword/verifyOtpAndLogTheUser", {
       method: "POST",
@@ -57,9 +66,15 @@ const page = () => {
       body: JSON.stringify({ emailOrUserName, uuid, otp })
     })
     const res1 = await req1.json()
-    if(!res1.success){
-      alert(res1.message)
-    }else{
+    setWait(false)
+    if (!res1.success) {
+      toast({
+        description: `❌ ${res1.message}`,
+      })
+    } else {
+      toast({
+        description: `✅ You are logged in`,
+      })
       redirect("/user/profile")
     }
   }
@@ -88,10 +103,10 @@ const page = () => {
               <InputOTPSlot index={5} />
             </InputOTPGroup>
           </InputOTP>
-          <Button onClick={onSubmitOtp} disabled={otp.length !== 6} variant="outline">Submit otp</Button>
+          <Button onClick={onSubmitOtp} disabled={otp.length !== 6 || wait} variant="outline">Submit otp</Button>
         </form>) : (<form className='p-3 flex flex-col justify-center items-center gap-3 w-72'>
           <Input value={emailOrUserName} onChange={(e) => { setEmailOrUserName(e.target.value) }} type="text" placeholder="Email or Username" className="w-full" />
-          <Button disabled={error} onClick={handleSubmit} variant="outline">Send otp</Button>
+          <Button disabled={error || wait} onClick={handleSubmit} variant="outline">Send otp</Button>
           <Link className='text-xs text-blue-900' href="/account/login">Back to login</Link>
         </form>)}
       </div>
