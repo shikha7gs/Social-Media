@@ -14,7 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 
 export default function Login() {
@@ -23,6 +23,7 @@ export default function Login() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState(true)
   const [wait, setWait] = useState(false)
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault()
     setWait(true)
@@ -46,7 +47,7 @@ export default function Login() {
     toast({
       description: `✅ You are logged in`,
     })
-    redirect("/user/profile")
+    router.push("/user/profile")
   }
 
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function Login() {
         const res1= await req1.json()
         if(res1.authenticated){
           console.log("live")
-          redirect("/user/profile")
+          router.push("/user/profile")
         }else{
           console.log("leave")
         }

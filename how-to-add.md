@@ -24,7 +24,7 @@
       const res1= await req1.json()
       if(res1.authenticated){
         console.log("live")
-        redirect("/user/profile")
+        router.push("/user/profile")
       }else{
         console.log("leave")
       }

@@ -14,9 +14,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useToast } from "@/hooks/use-toast"
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 const page = () => {
+  const router=useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [fullName, setFullName] = useState("")
@@ -86,7 +87,7 @@ const page = () => {
       const res1 = await req1.json()
       if (res1.authenticated) {
         console.log("live")
-        redirect("/user/profile")
+        router.push("/user/profile")
       } else {
         console.log("leave")
       }

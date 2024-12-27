@@ -9,7 +9,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 
 const page = () => {
@@ -20,6 +20,7 @@ const page = () => {
   const [otp, setOtp] = useState("")
   const [wait, setWait] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -75,7 +76,7 @@ const page = () => {
       toast({
         description: `✅ You are logged in`,
       })
-      redirect("/user/profile")
+      router.push("/user/profile")
     }
   }
 
@@ -91,7 +92,7 @@ const page = () => {
         const res1= await req1.json()
         if(res1.authenticated){
           console.log("live")
-          redirect("/user/profile")
+          router.push("/user/profile")
         }else{
           console.log("leave")
         }
