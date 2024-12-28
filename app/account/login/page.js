@@ -15,6 +15,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useRouter } from "next/navigation"
+import { generateToken } from "@/func/generate_token"
 
 
 export default function Login() {
@@ -27,12 +28,14 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setWait(true)
+    const {token,id} = await generateToken()
     const req1 = await fetch("/api/account/login", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ emailOrUsername, password })
+      body: JSON.stringify({ emailOrUsername, password,id })
     })
     const res1 = await req1.json()
     setWait(false)

@@ -34,7 +34,7 @@
 
 ### Token:
  - In client before making request(fetch): `const {token,id} = await generateToken()`
- - In client in header of request add - 'Authorization': `Bearer ${token}`   and in body add id
+ - In client in header of request add - 'Authorization': `Bearer ${token}` and in body add id
  - in server api- `const token = params.headers.get('authorization')?.split(' ')[1]
         if (!token || !id) return NextResponse.json({ success: false, message: "Token is required" })
         const validateToken =await validateJWT(token, id)

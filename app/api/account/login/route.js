@@ -5,12 +5,17 @@ import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { Session } from "@/lib/model/Session";
 import { rateLimit } from "@/lib/rateLimit";
+import { validateJWT } from "@/func/generate_token";
 
 export async function POST(req) {
     try {
-        const isAllowed = await rateLimit(req,"login");
-        if (!isAllowed) return NextResponse.json({success:false,message:"Too many requests, try 5 minutes later"});
-        const { emailOrUsername, password } = await req.json();
+        const isAllowed = await rateLimit(req, "login");
+        if (!isAllowed) return NextResponse.json({ success: false, message: "Too many requests, try 5 minutes later" });
+        const { emailOrUsername, password,id } = await req.json();
+        const token = req.headers.get('authorization')?.split(' ')[1]
+        if (!token || !id) return NextResponse.json({ success: false, message: "Token is required" })
+        const validateToken = await validateJWT(token, id)
+        if (!validateToken.valid) return NextResponse.json({ success: false, message: "Not valid token" })
         await connectDb();
         const findUser = await User.findOne({
             $or: [

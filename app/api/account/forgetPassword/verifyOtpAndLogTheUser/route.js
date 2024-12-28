@@ -1,3 +1,4 @@
+import { validateJWT } from "@/func/generate_token";
 import { Otp } from "@/lib/model/Otp"
 import { Session } from "@/lib/model/Session";
 import { User } from "@/lib/model/User";
@@ -10,7 +11,11 @@ export async function POST(req) {
     try {
         const isAllowed = await rateLimit(req, "login");
         if (!isAllowed) return NextResponse.json({ success: false, message: "Too many requests, try again after 5 minutes" });
-        const { emailOrUserName, uuid, otp } = await req.json()
+        const { emailOrUserName, uuid, otp, id } = await req.json()
+        const token = req.headers.get('authorization')?.split(' ')[1]
+        if (!token || !id) return NextResponse.json({ success: false, message: "Token is required" })
+        const validateToken = await validateJWT(token, id)
+        if (!validateToken.valid) return NextResponse.json({ success: false, message: "Not valid token" })
         await connectDb()
         const verifyOtp = await Otp.findOne({ uuid: uuid })
         if (!verifyOtp) return NextResponse.json({ success: false, message: "Otp is expired, try again" })

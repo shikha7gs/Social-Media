@@ -12,6 +12,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import { generateToken } from '@/func/generate_token';
 
 const page = () => {
     const [userData, setUserData] = useState({})
@@ -32,13 +33,14 @@ const page = () => {
 
                 if (sessionResult.success) {
                     console.log(sessionResult.userDetails);
-
+                    const { token, id } = await generateToken()
                     const userDetailsResponse = await fetch("/api/account/fetchUserDetails", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
+                            'Authorization': `Bearer ${token}`
                         },
-                        body: JSON.stringify({ userName: sessionResult?.userDetails?.userName }),
+                        body: JSON.stringify({ userName: sessionResult?.userDetails?.userName, id }),
                     });
                     const userDetailsResult = await userDetailsResponse.json();
                     if (userDetailsResult.success) {
@@ -81,18 +83,20 @@ const page = () => {
                 changes.push(key);
             }
         }
+        const {token,id} = await generateToken()
         const req = await fetch("/api/account/updateProfile", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ changes, newUserData }),
+            body: JSON.stringify({ changes, newUserData ,id}),
         })
-        const res=await req.json()
-        if(res.success){
+        const res = await req.json()
+        if (res.success) {
             toast({ description: `✅ Changed` });
             router.push("/user/profile")
-        }else{
+        } else {
             toast({ description: `❌ ${res.message}` });
         }
     }

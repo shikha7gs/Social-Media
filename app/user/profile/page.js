@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useToast } from "@/hooks/use-toast"
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { generateToken } from '@/func/generate_token';
 
 const page = () => {
     const isEffectExecuted = useRef(false);
@@ -13,7 +14,7 @@ const page = () => {
 
     useEffect(() => {
         if (isEffectExecuted.current) return;
-        isEffectExecuted.current = true; 
+        isEffectExecuted.current = true;
 
         const checkSessionAndFetchUserDetails = async () => {
             try {
@@ -28,13 +29,14 @@ const page = () => {
 
                 if (sessionResult.success) {
                     console.log(sessionResult.userDetails);
-
+                    const { token, id } = await generateToken()
                     const userDetailsResponse = await fetch("/api/account/fetchUserDetails", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
+                            'Authorization': `Bearer ${token}`
                         },
-                        body: JSON.stringify({ userName: sessionResult?.userDetails?.userName }),
+                        body: JSON.stringify({ userName: sessionResult?.userDetails?.userName, id }),
                     });
                     const userDetailsResult = await userDetailsResponse.json();
                     if (userDetailsResult.success) {
@@ -46,7 +48,7 @@ const page = () => {
                         setUserData(userDetailsResult?.data)
                         console.log(userDetailsResult);
                         return
-                    }else{
+                    } else {
                         toast({ description: `❌ ${userDetailsResult.message}` });
                     }
                 } else if (sessionResult.redirect) {

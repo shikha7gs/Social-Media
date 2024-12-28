@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/input-otp"
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
+import { generateToken } from '@/func/generate_token'
 
 const page = () => {
   const [emailOrUserName, setEmailOrUserName] = useState("")
@@ -25,12 +26,14 @@ const page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setWait(true)
+    const { token, id } = await generateToken()
     const req1 = await fetch("/api/account/forgetPassword/checkExistanceAndSendOtp", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ emailOrUserName })
+      body: JSON.stringify({ emailOrUserName, id })
     })
     const res1 = await req1.json()
     setWait(false)
@@ -59,12 +62,14 @@ const page = () => {
     e.preventDefault()
     setWait(true)
     console.log(otp)
+    const { token, id } = await generateToken()
     const req1 = await fetch("/api/account/forgetPassword/verifyOtpAndLogTheUser", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ emailOrUserName, uuid, otp })
+      body: JSON.stringify({ emailOrUserName, uuid, otp, id })
     })
     const res1 = await req1.json()
     setWait(false)
@@ -80,24 +85,24 @@ const page = () => {
     }
   }
 
-  useEffect(()=>{
-      (async()=>{
-        const req1= await fetch("/api/account/checkAuthenticate", {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify()
-        })
-        const res1= await req1.json()
-        if(res1.authenticated){
-          console.log("live")
-          router.push("/user/profile")
-        }else{
-          console.log("leave")
-        }
-      })()
-    },[])
+  useEffect(() => {
+    (async () => {
+      const req1 = await fetch("/api/account/checkAuthenticate", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify()
+      })
+      const res1 = await req1.json()
+      if (res1.authenticated) {
+        console.log("live")
+        router.push("/user/profile")
+      } else {
+        console.log("leave")
+      }
+    })()
+  }, [])
 
   return (
     <div className='justify-center items-center min-h-screen flex flex-col'>
