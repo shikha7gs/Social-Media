@@ -12,3 +12,10 @@
 
  ### Rate limit:
  - Added rate limit in every api except check username
+
+ ### Profile:
+ - Check session id.
+ - If user is entering here for 1st time, a document is created for meta data(user details) and posts.
+ - render all data and show dynamically.
+
+ ### Modify Profile:

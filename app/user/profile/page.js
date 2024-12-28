@@ -80,13 +80,14 @@ const page = () => {
                 <ul className='m-6'>
                     <li className='text-xl'>Name:<strong>&nbsp;{userData?.fullName || "NA"}</strong></li>
                     <li className='text-xl'>Profession:<strong>&nbsp;{userData?.profession || "NA"}</strong></li>
-                    <li className='text-xl'>Description:<strong>&nbsp;{userData?.descripion || "NA"}</strong></li>
+                    <li className='text-xl'>Description:<strong>&nbsp;{userData?.description || "NA"}</strong></li>
                 </ul>
             </div>
             <div className=' w-full h-[5%]'>
                 <ul className='flex gap-6 items-center w-full h-full ml-6'>
                     <Link href=""><strong>{userData?.followers?.length || "0"}</strong>&nbsp;Followers</Link>
                     <Link href=""><strong>{userData?.followings?.length || "0"}</strong>&nbsp;Following</Link>
+                    <Link className='hover:bg-gray-100 p-1 border rounded-lg' href="/user/profile/modify">Modify</Link>
                 </ul>
             </div>
             <div className='w-full border-t flex flex-wrap justify-center mt-1'>
