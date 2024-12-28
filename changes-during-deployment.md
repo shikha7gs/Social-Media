@@ -1,0 +1,1 @@
+in next.cpnfig.mjs channge tge origin instead o localhoat

@@ -21,3 +21,6 @@
  ### Modify Profile:
  - it will check session id and based on it bring and keep datas qnd user couldchange the data even images, banner and all.
  - when done it will request a post req at update profile then there it will ask for changes made in keys and newuser data and based on it it will change.
+
+ ### CORS and restrictions:
+ - Added CORS with only my domain.
