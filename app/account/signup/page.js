@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from 'next/navigation'
+import { generateToken } from '@/func/generate_token'
 
 const page = () => {
-  const router=useRouter()
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [fullName, setFullName] = useState("")
@@ -30,10 +31,14 @@ const page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setWait(true)
+    const genToken = await generateToken()
+    if (!genToken.success) toast({ description: `❌ Something went wrong, try again`, })
     const req1 = await fetch("/api/account/signup", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
+        'userId': genToken.userId,
+        'token': genToken.token
       },
       body: JSON.stringify({ email, password, fullName, userName })
     })

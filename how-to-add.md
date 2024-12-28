@@ -30,3 +30,18 @@
       }
     })()
   },[])`
+
+## Token:
+ - above the api request(fetch)-`const genToken = await generateToken()
+    if (!genToken.success) toast({ description: `❌ Something went wrong, try again`, })`
+ - in headers- ` headers: {
+        'Content-Type': 'application/json',
+        'userId': genToken.userId,
+        'token': genToken.token
+      },`
+ - in server api- `const userToken = params.headers.get('token')
+        const userId = params.headers.get('userId')
+        if (!userId || !userToken) return NextResponse.json({ success: false, message: "token or userId is wrong" })
+        const checkTokenExistance = await Token.findOne({ userId: userId })
+        if (!checkTokenExistance || checkTokenExistance.token != userToken) return NextResponse.json({ success: false, message: "token or userId is wrong" })
+        await Token.deleteOne({userId:userId})`

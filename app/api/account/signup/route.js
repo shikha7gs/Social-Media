@@ -1,3 +1,4 @@
+import { Token } from "@/lib/model/Tokens";
 import { User } from "@/lib/model/User"
 import connectDb from "@/lib/mongoose"
 import { rateLimit } from "@/lib/rateLimit";
@@ -12,6 +13,12 @@ function isValidEmail(email) {
 
 export async function POST(params) {
     try {
+        const userToken = params.headers.get('token')
+        const userId = params.headers.get('userId')
+        if (!userId || !userToken) return NextResponse.json({ success: false, message: "token or userId is wrong" })
+        const checkTokenExistance = await Token.findOne({ userId: userId })
+        if (!checkTokenExistance || checkTokenExistance.token != userToken) return NextResponse.json({ success: false, message: "token or userId is wrong" })
+        await Token.deleteOne({userId:userId})
         const isAllowed = await rateLimit(params, "signup");
         if (!isAllowed) return NextResponse.json({ success: false, message: "Attempt is over, Try 5 minutes later" });
         const { email, password, fullName, userName } = await params.json()
@@ -41,6 +48,7 @@ export async function POST(params) {
         await newUser.save()
         return NextResponse.json({ success: true })
     } catch (error) {
+        console.log(error.message)
         return NextResponse.json({ success: false, message: "Something went wrong" })
     }
 }
