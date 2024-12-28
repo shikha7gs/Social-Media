@@ -31,16 +31,14 @@ const page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setWait(true)
-    const genToken = await generateToken()
-    if (!genToken.success) toast({ description: `❌ Something went wrong, try again`, })
+    const { token, id } = await generateToken()
     const req1 = await fetch("/api/account/signup", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
-        'userId': genToken.userId,
-        'token': genToken.token
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ email, password, fullName, userName })
+      body: JSON.stringify({ email, password, fullName, userName, id })
     })
     const res1 = await req1.json()
     setWait(false)

@@ -31,17 +31,11 @@
     })()
   },[])`
 
-## Token:
- - above the api request(fetch)-`const genToken = await generateToken()
-    if (!genToken.success) toast({ description: `❌ Something went wrong, try again`, })`
- - in headers- ` headers: {
-        'Content-Type': 'application/json',
-        'userId': genToken.userId,
-        'token': genToken.token
-      },`
- - in server api- `const userToken = params.headers.get('token')
-        const userId = params.headers.get('userId')
-        if (!userId || !userToken) return NextResponse.json({ success: false, message: "token or userId is wrong" })
-        const checkTokenExistance = await Token.findOne({ userId: userId })
-        if (!checkTokenExistance || checkTokenExistance.token != userToken) return NextResponse.json({ success: false, message: "token or userId is wrong" })
-        await Token.deleteOne({userId:userId})`
+
+### Token:
+ - In client before making request(fetch): `const {token,id} = await generateToken()`
+ - In client in header of request add - 'Authorization': `Bearer ${token}`   and in body add id
+ - in server api- `const token = params.headers.get('authorization')?.split(' ')[1]
+        if (!token || !id) return NextResponse.json({ success: false, message: "Token is required" })
+        const validateToken =await validateJWT(token, id)
+        if (!validateToken.valid) return NextResponse.json({ success: false, message: "Not valid token" })`

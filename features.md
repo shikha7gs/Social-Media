@@ -26,5 +26,5 @@
  - Added CORS with only my domain.
 
  ### Token on every Request:
- - Problem: By cors we could stop in browsee but even now someone could use our rest api using curl, postman etc.
- - Solution: I have made a token system where in func/generate_token.js I generate user id and token then whenever user call this function it will store in mongodb and return token and userid yhen browser request using this token and userId and in server I check whether token and userid is matched with mongodb , attacker will not be able to generate and store. yey.
+ - Problem: By cors we could stop calling our apis externally in browsee but even now someone could use our api using curl, postman etc.
+ - Solution: I have made a token system where in func/generate_token.js I generate id and make a token using jwt then whenever user call this function it will give token and id when browser request using this token and keep id as data, in server I check whether token is valid and decrypt using secret key and check dsscrypted id with user browser given id, attacker will not be able to generate. yey.

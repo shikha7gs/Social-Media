@@ -1,4 +1,4 @@
-import { Token } from "@/lib/model/Tokens";
+import { validateJWT } from "@/func/generate_token";
 import { User } from "@/lib/model/User"
 import connectDb from "@/lib/mongoose"
 import { rateLimit } from "@/lib/rateLimit";
@@ -13,15 +13,14 @@ function isValidEmail(email) {
 
 export async function POST(params) {
     try {
-        const userToken = params.headers.get('token')
-        const userId = params.headers.get('userId')
-        if (!userId || !userToken) return NextResponse.json({ success: false, message: "token or userId is wrong" })
-        const checkTokenExistance = await Token.findOne({ userId: userId })
-        if (!checkTokenExistance || checkTokenExistance.token != userToken) return NextResponse.json({ success: false, message: "token or userId is wrong" })
-        await Token.deleteOne({userId:userId})
         const isAllowed = await rateLimit(params, "signup");
         if (!isAllowed) return NextResponse.json({ success: false, message: "Attempt is over, Try 5 minutes later" });
-        const { email, password, fullName, userName } = await params.json()
+        const { email, password, fullName, userName, id } = await params.json()
+        const token = params.headers.get('authorization')?.split(' ')[1]
+        if (!token || !id) return NextResponse.json({ success: false, message: "Token is required" })
+        const validateToken =await validateJWT(token, id)
+        if (!validateToken.valid) return NextResponse.json({ success: false, message: "Not valid token" })
+
         if (
             !userName.includes(" ") &&
             userName.length >= 8 &&
