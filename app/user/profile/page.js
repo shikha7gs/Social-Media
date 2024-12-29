@@ -53,7 +53,6 @@ const page = () => {
                         }
                         setPosts(userDetailsResult?.posts?.posts)
                         setUserData(userDetailsResult?.data)
-                        console.log(userDetailsResult);
                         return
                     } else {
                         toast({ description: `❌ ${userDetailsResult.message}` });
@@ -122,7 +121,7 @@ const page = () => {
                 {posts.length > 0 ? (posts.map((item) => {
                     return (
                         <div key={item.uid} className='border h-32 w-96 my-5 mx-20 rounded-lg flex flex-col justify-center overflow-x-auto items-center gap-5 relative'>
-                            <Link href={`post/${item.uid}`} className='font-bold text-lg px-8'>{item.title}</Link>
+                            <Link href={`http://localhost:3000/post/${item.uid}`} className='font-bold text-lg px-8'>{item.title}</Link>
                             <div>{item.category}</div>
                             <div className='absolute top-0 right-0'>
                                 <DropdownMenu>
