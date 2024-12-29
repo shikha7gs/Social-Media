@@ -30,7 +30,7 @@ const page = () => {
                 if (sessionResult.success) {
                     console.log(sessionResult.userDetails);
                     const { token, id } = await generateToken()
-                    const userDetailsResponse = await fetch("/api/account/fetchUserDetails", {
+                    const userDetailsResponse = await fetch("/api/user/fetchUserDetails", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -92,14 +92,16 @@ const page = () => {
                     <Link className='hover:bg-gray-100 p-1 border rounded-lg' href="/user/profile/modify">Modify</Link>
                 </ul>
             </div>
-            <div className='w-full border-t flex flex-wrap justify-center mt-1'>
+            <div className='w-full border-t flex flex-wrap justify-center mt-1 relative'>
+                <Link href={"/user/profile/new"} className="absolute right-5 top-2 border  rounded-lg h-7 w-7 text-center">+</Link>
                 {posts.length > 0 ? (posts.map((item) => {
                     return (
-                        <div key={item.id} className='border h-32 w-96 my-5 mx-20 rounded-lg flex justify-center items-center'>
-                            <h1>{item.title}</h1>
-                        </div>
+                        <Link href={`post/${item.uid}`} key={item.uid} className='border h-32 w-96 my-5 mx-20 rounded-lg flex flex-col justify-center overflow-x-auto items-center gap-5'>
+                            <h1 className='font-bold text-lg px-8'>{item.title}</h1>
+                            <div>{item.category}</div>
+                        </Link>
                     )
-                })) : "No post was created"}
+                })) : <p className='m-2'>No post was created</p>}
             </div>
         </div>
     );

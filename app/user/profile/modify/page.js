@@ -34,7 +34,7 @@ const page = () => {
                 if (sessionResult.success) {
                     console.log(sessionResult.userDetails);
                     const { token, id } = await generateToken()
-                    const userDetailsResponse = await fetch("/api/account/fetchUserDetails", {
+                    const userDetailsResponse = await fetch("/api/user/fetchUserDetails", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -84,7 +84,7 @@ const page = () => {
             }
         }
         const {token,id} = await generateToken()
-        const req = await fetch("/api/account/updateProfile", {
+        const req = await fetch("/api/user/updateProfile", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
