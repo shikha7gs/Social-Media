@@ -4,6 +4,13 @@ import { useToast } from "@/hooks/use-toast"
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { generateToken } from '@/func/generate_token';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { EllipsisVertical, Link2Icon, Trash } from 'lucide-react';
 
 const page = () => {
     const isEffectExecuted = useRef(false);
@@ -67,6 +74,24 @@ const page = () => {
         checkSessionAndFetchUserDetails();
     }, [router]);
 
+    const deletePost = async (uid) => {
+        const { token, id } = await generateToken()
+        const req = await fetch("/api/user/deletePost", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ uid: uid, id, userName: userData.userName }),
+        });
+        const res = await req.json()
+        if (res.success) {
+            window.location.reload()
+        } else {
+            toast({ description: `❌ ${res.message}` });
+        }
+    }
+
 
     return (
         <div className='h-screen flex flex-col items-center'>
@@ -96,10 +121,19 @@ const page = () => {
                 <Link href={"/user/profile/new"} className="absolute right-5 top-2 border  rounded-lg h-7 w-7 text-center">+</Link>
                 {posts.length > 0 ? (posts.map((item) => {
                     return (
-                        <Link href={`post/${item.uid}`} key={item.uid} className='border h-32 w-96 my-5 mx-20 rounded-lg flex flex-col justify-center overflow-x-auto items-center gap-5'>
-                            <h1 className='font-bold text-lg px-8'>{item.title}</h1>
+                        <div key={item.uid} className='border h-32 w-96 my-5 mx-20 rounded-lg flex flex-col justify-center overflow-x-auto items-center gap-5 relative'>
+                            <Link href={`post/${item.uid}`} className='font-bold text-lg px-8'>{item.title}</Link>
                             <div>{item.category}</div>
-                        </Link>
+                            <div className='absolute top-0 right-0'>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger><EllipsisVertical /></DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem onClick={() => { navigator.clipboard.writeText(`localhost:3000/post/${item.uid}`); toast({ description: `✅ Copied` }); }}>Save Link<Link2Icon /></DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => { deletePost(item.uid) }}>Delete<Trash /></DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        </div>
                     )
                 })) : <p className='m-2'>No post was created</p>}
             </div>
