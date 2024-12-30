@@ -38,3 +38,7 @@
  ### Page show
   - Made a page- post/[uid] to show post, when page is loaded, it calls api findPost which look everywhere with uid and id get any post so it brings the post and details of owner.
   - It shows the md description in good way using unified.
+
+ ### show profiles and follow\
+  - Now user could get others profile and follow them easily.- /profile/[userName]
+  - When user click on folllow or unfollow it will call API- followOrUnfollow which will check whether it has t follow or unfollow then update Db then boom.

@@ -9,6 +9,7 @@ import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 import rehypePrettyCode from "rehype-pretty-code";
 import { transformerCopyButton } from '@rehype-pretty/transformers'
+import Link from "next/link"
 
 const page = ({ params }) => {
   const [data, setData] = useState()
@@ -71,7 +72,7 @@ const page = ({ params }) => {
     <div className="max-w-6xl flex flex-col items-center mx-auto p-4">
       <h1 className="text-4xl font-bold mb-4">{data?.posts[0]?.title || " "}</h1>
       <div className="flex gap-2">
-        <p className="text-sm text-gray-500 mb-4 italic">By {data?.userName || " "}</p>
+        <Link href={`http://localhost:3000/profile/${data?.userName}` || " "} className="text-sm text-gray-500 mb-4 italic">By {data?.userName || " "}</Link>
         <p className="text-sm text-gray-500 mb-4">{parseISOString(data?.createdAt) || " "}</p>
       </div>
       <div dangerouslySetInnerHTML={{ __html: htmlContent }} className="prose dark:prose-invert"></div>
