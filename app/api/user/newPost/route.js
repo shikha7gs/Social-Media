@@ -23,6 +23,7 @@ export async function POST(req) {
                 description: description,
                 category: category,
                 uid: uuid,
+                likes:[]
             });
             await userPostDb.save();
             return NextResponse.json({ success: true })
