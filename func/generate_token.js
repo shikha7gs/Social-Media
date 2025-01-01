@@ -14,7 +14,6 @@ export const validateJWT = async(token,id) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
       decoded.id=id
-      console.log(decoded.id , id)
       return { valid: true, decoded };
     } catch (error) {
       return { valid: false, message: error.message };

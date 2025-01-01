@@ -16,17 +16,26 @@ export async function POST(req) {
         if (!validateToken.valid) return NextResponse.json({ success: false, message: "Not valid token" })
         await connectDb()
         if (!alreadyFollowed) {
-            // follow
+            // add follower in to
             console.log("Followed to", To, "By", From)
             const getMetaData = await MetaData.findOne({ userName: To })
             getMetaData.followers.push(From)
-            getMetaData.save()
+            await getMetaData.save()
+            // add following in from 
+            const getMetaDataFrom = await MetaData.findOne({ userName: From })
+            getMetaDataFrom.followings.push(To)
+            await getMetaDataFrom.save()
             return NextResponse.json({ success: true })
         } else {
             // Unfollow
+            // remove follower in to
             const getMetaData = await MetaData.findOne({ userName: To })
             getMetaData.followers = getMetaData.followers.filter(follower => follower !== From)
             getMetaData.save()
+            // remove following in to
+            const getMetaDataFrom = await MetaData.findOne({ userName: From })
+            getMetaDataFrom.followings = getMetaData.followings.filter(following => following !== To)
+            getMetaDataFrom.save()
             console.log("Unfollowed to", To, "By", From)
             return NextResponse.json({ success: true })
         }

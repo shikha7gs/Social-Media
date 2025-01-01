@@ -46,3 +46,7 @@
  ### Like Posts
   - Now user could like posts.
   - When user like or dislike it calls likeOrUnlike API which will add the userName in likes and add in likePosts in metadata as well to contain info as what all has been liked. and In dislike it removes the username from arr.
+ 
+ ### Feed
+  - In home user could see posts as reels.
+  - When page reloads in calls - `app\api\user\getRecommendPosts\route.js` , Under it , it firstly gget user details and see what user likes, which category then show such post, It prioritize same category post of followings than rest same category post. Ater getting category it brings thepost and shows.
