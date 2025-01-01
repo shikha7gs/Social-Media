@@ -15,8 +15,22 @@ const page = ({ params }) => {
   const [data, setData] = useState()
   const [htmlContent, setHtmlContent] = useState("")
   const [viewerData, setViewerData] = useState()
+
+  const setViewer = async (userName, Uid, viewerUserName) => {
+    console.log(userName, Uid, viewerUserName)
+    const setThings = await fetch("/api/user/setViewer", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userName, Uid, viewerUserName })
+    })
+    const setThingsResponse = await setThings.json()
+    console.log(setThingsResponse)
+  }
+
   useEffect(() => {
-    const getPost = async () => {
+    const getPost = async (viewerUserName) => {
       const uid = (await params).uid;
       const { token, id } = await generateToken()
       const req = await fetch("/api/user/findPost", {
@@ -29,7 +43,7 @@ const page = ({ params }) => {
       })
       const res = await req.json()
       if (res.success) {
-        console.log(res.data)
+        setViewer(res.data.userName, res.data.posts[0].uid, viewerUserName)
         setData(res.data)
       } else {
         alert("not done")
@@ -46,10 +60,10 @@ const page = ({ params }) => {
       const res = await req.json()
       if (res.success) {
         setViewerData({ logged: true, userName: res?.userDetails?.userName })
+        getPost(res?.userDetails?.userName)
       } else {
         setViewerData({ logged: false })
       }
-      getPost()
     }
     getViewetData()
   }, [])

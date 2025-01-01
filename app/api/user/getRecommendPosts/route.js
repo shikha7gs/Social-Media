@@ -22,7 +22,7 @@ const getCategoryFunc = async (likePosts) => {
     throw new Error("Something Went Wrong");
 }
 
-const postsOfSameCategoriesOfFollowings = async (categories, followings) => {
+const postsOfSameCategoriesOfFollowings = async (categories, followings,userName) => {
     const { token, id } = await generateToken()
     const postsOfSameCategoriesOfFollowingsReq = await fetch("http://localhost:3000/api/user/getRecommendPosts/getPostsOfSameCategories", {
         method: "POST",
@@ -30,7 +30,7 @@ const postsOfSameCategoriesOfFollowings = async (categories, followings) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ categories, followings, id })
+        body: JSON.stringify({ categories, followings, id,userName })
     })
     const postsOfSameCategoriesOfFollowingsRes = await postsOfSameCategoriesOfFollowingsReq.json()
     if (postsOfSameCategoriesOfFollowingsRes.success) {
@@ -60,7 +60,7 @@ export async function POST(req) {
         const getCategories = await getCategoryFunc(likePosts)// It will return like - {category1:5} , means 5 posts belongs from category1
 
         // Get posts Of Same Categories Of Followings
-        const getPostsOfSameCategories = await postsOfSameCategoriesOfFollowings(getCategories, followings)
+        const getPostsOfSameCategories = await postsOfSameCategoriesOfFollowings(getCategories, followings,userName)
 
         return NextResponse.json({ success: true, Posts: getPostsOfSameCategories })
     } catch (error) {
