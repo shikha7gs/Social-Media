@@ -54,3 +54,6 @@
  ### Followers and Followings page
  - in \user\profile\ff , user could see its followings and followers and could customize.
  - When user click on unfollow or remove, it send request in /api/other/unfollowOrRemove which will take action(unfollow or remove) , to(other) and from(username), if action is unfollow it will remove `from` from `to` followers and remove `to` from `from` followings or else if action is remove, it will remove `to` from `from` followers and remove `from` from `to` followings
+
+ ### Added navbar
+ - Added different navbar for login and logged out user.
