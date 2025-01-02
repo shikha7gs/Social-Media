@@ -22,7 +22,7 @@ async function categorizePosts(categories, followings, userName) {
     };
 
     await Promise.all(
-        Object.keys(categories).map((category) => fetchAndCategorizePosts(userName, category)) // It is called for every categories, ai_ml
+        categories.map((category) => fetchAndCategorizePosts(userName, category)) // It is called for every categories.
     );
 
     return { followingPost, restPost };
