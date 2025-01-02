@@ -12,6 +12,7 @@ import { unified } from 'unified'
 import rehypePrettyCode from "rehype-pretty-code";
 import { transformerCopyButton } from '@rehype-pretty/transformers'
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
   const router = useRouter()
@@ -19,12 +20,15 @@ export default function Home() {
   const [chunksArr, setChunksArr] = useState()
   const [indexOfchunksArr, setIndexOfChunksArr] = useState(0)
   const [htmlContent, setHtmlContent] = useState([])
+  const { toast } = useToast()
 
   const getArryPost = async (chunksArr) => {
     if (chunksArr) {
       const { token, id } = await generateToken()
       if (!chunksArr[indexOfchunksArr]) {
-        alert("End")
+        toast({
+          description: `❌ No post is available`,
+        })
         return
       }
       const postDetailsReq = await fetch("/api/user/getPostDetailsBulk", {
@@ -40,7 +44,9 @@ export default function Home() {
         setPostArr(prevPostArr => [...prevPostArr, ...postDetailsRes.postArr]);
         setIndexOfChunksArr(indexOfchunksArr + 1)
       } else {
-        alert(postDetailsRes.message)
+        toast({
+          description: `❌ ${postDetailsRes.message}`,
+        })
       }
     }
   }
@@ -68,7 +74,9 @@ export default function Home() {
       if (recommentPostUids.success) {
         getChunksArr(recommentPostUids.Posts)
       } else {
-        alert(getPosts.message)
+        toast({
+          description: `❌ ${getPosts.message}`,
+        })
       }
     }
     const checkAuthenticate = async () => {
@@ -121,7 +129,7 @@ export default function Home() {
     <div className="flex flex-col items-center">
       {postArr.length !== 0 && postArr.map((post, index) => {
         return (
-          <div key={index} className="w-[80%] m-5 h-72 border">
+          <div key={index} className="md:w-[80%] w-[90%] md:m-5 m-3 h-72 border overflow-hidden">
             <div className="my-3 mx-5">
               <button onClick={() => { router.push(`http://localhost:3000/post/${post.posts[0].uid}`) }} className="text-xl font-bold">
                 {post.posts[0].title}
@@ -135,13 +143,13 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="w-full h-[70%] overflow-auto">
+            <div className="w-full md:m-5 m-3 md:h-[70%] h-[55%] overflow-auto">
               <div dangerouslySetInnerHTML={{ __html: htmlContent[index] }} className="prose dark:prose-invert"></div>
             </div>
           </div>
         )
       })}
-      {postArr.length !== 0 && <Button varient="outline" onClick={() => { getArryPost(chunksArr) }}>Load more</Button>}
+      {postArr.length !== 0 && <Button variant="outline" onClick={() => { getArryPost(chunksArr) }}>Load more</Button>}
     </div>
   );
 }

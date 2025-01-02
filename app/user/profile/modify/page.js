@@ -74,7 +74,7 @@ const page = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (newUserData == userData) {
-            alert("no changes made")
+            toast({ description: `❌ No changes made` });
             return
         }
         let changes = [];

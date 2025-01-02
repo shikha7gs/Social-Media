@@ -15,6 +15,7 @@ export async function POST(req) {
         const validateToken = await validateJWT(token, id)
         if (!validateToken.valid) return NextResponse.json({ success: false, message: "Not valid token" })
         await connectDb()
+        if (To == From) return NextResponse.json({ success: false, message: "Can't follow to ourself" })
         if (!alreadyFollowed) {
             // add follower in to
             console.log("Followed to", To, "By", From)

@@ -189,7 +189,7 @@ const page = () => {
                     value={description}
                     onChange={setDescription}
                 />
-                <Button disabled={error} onClick={handleSubmit} varient="outline">Publish</Button>
+                <Button disabled={error} onClick={handleSubmit} variant="outline">Publish</Button>
             </form>
         </div>
     )

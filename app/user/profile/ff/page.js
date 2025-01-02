@@ -75,11 +75,11 @@ const page = () => {
         if (response.success) {
             window.location.reload()
         } else {
-            alert(response.message)
+            toast({ description: `❌ ${response.message}` });
         }
     }
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen w-full gap-10">
+        <div className="flex flex-col justify-center items-center min-h-screen w-full gap-16">
             <div className="text-2xl font-bold">Followers and Followings</div>
             <Tabs defaultValue="followers" className="w-full">
                 <TabsList>
@@ -105,7 +105,7 @@ const page = () => {
                                         <TableCell>{account}</TableCell>
                                         <TableCell></TableCell>
                                         <TableCell className="text-center">
-                                            <Button onClick={() => { handleUnfollow(account, "remove") }} varient="outline">Remove</Button>
+                                            <Button onClick={() => { handleUnfollow(account, "remove") }} variant="outline">Remove</Button>
                                         </TableCell>
                                     </TableRow>
                                 )
@@ -132,7 +132,7 @@ const page = () => {
                                         <TableCell>{account}</TableCell>
                                         <TableCell></TableCell>
                                         <TableCell className="text-center">
-                                            <Button onClick={() => { handleUnfollow(account, "unfollow") }} varient="outline">Unfollow</Button>
+                                            <Button onClick={() => { handleUnfollow(account, "unfollow") }} variant="outline">Unfollow</Button>
                                         </TableCell>
                                     </TableRow>
                                 )

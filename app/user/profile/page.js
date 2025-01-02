@@ -94,16 +94,13 @@ const page = () => {
 
     return (
         <div className='h-screen flex flex-col items-center'>
-            <div className=' w-full h-[30%] flex items-center'>
-                <div className='icon h-40 w-40 bg-black absolute ml-20 rounded-full z-40'>
+            <div className="w-full md:h-[30%] h-[40%] flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${userData?.banner || "NA"})` }}>
+                <div className='icon h-40 w-40 bg-black rounded-full z-30'>
                     <img src={userData?.pic || "NA"} alt="User Photo" className='h-full w-full rounded-full' />
-                </div>
-                <div className='banner w-full h-full bg-blue-700'>
-                    <img src={userData?.banner || "NA"} alt='Banner' className='w-full h-full' />
                 </div>
             </div>
             <div className=' w-full h-[17%]'>
-                <ul className='m-6'>
+                <ul className='md:m-6 m-2'>
                     <li className='text-xl'>Name:<strong>&nbsp;{userData?.fullName || "NA"}</strong></li>
                     <li className='text-xl'>Profession:<strong>&nbsp;{userData?.profession || "NA"}</strong></li>
                     <li className='text-xl'>Description:<strong>&nbsp;{userData?.description || "NA"}</strong></li>
@@ -120,7 +117,7 @@ const page = () => {
                 <Link href={"/user/profile/new"} className="absolute right-5 top-2 border  rounded-lg h-7 w-7 text-center">+</Link>
                 {posts.length > 0 ? (posts.map((item) => {
                     return (
-                        <div key={item.uid} className='border h-32 w-96 my-5 mx-20 rounded-lg flex flex-col justify-center overflow-x-auto items-center gap-5 relative'>
+                        <div key={item.uid} className='border h-32 w-96 my-5 md:mx-20 mx-1 rounded-lg flex flex-col justify-center overflow-x-auto items-center gap-5 relative'>
                             <Link href={`http://localhost:3000/post/${item.uid}`} className='font-bold text-lg px-8'>{item.title}</Link>
                             <div>{item.category}</div>
                             <div className='absolute top-0 right-0'>

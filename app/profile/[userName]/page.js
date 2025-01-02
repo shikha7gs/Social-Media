@@ -34,7 +34,9 @@ const page = ({ params }) => {
                 setMetaData(res.metaData)
                 setPosts(res.post)
             } else {
-                alert(res.message)
+                toast({
+                    description: `❌ ${res.message}`,
+                })
             }
         }
         const getViewetData = async () => {
@@ -59,11 +61,15 @@ const page = ({ params }) => {
     const handleFollowAndUnfollow = async () => {
         if (viewerData) {
             if (!viewerData.logged) {
-                alert("Firstly signup")
+                toast({
+                    description: `❌ Firstly signup`,
+                })
                 return
             }
             if (metaData.userName == viewerData.userName) {
-                alert("couldn't follow to ourself")
+                toast({
+                    description: `❌ couldn't follow to ourself`,
+                })
             }
             const alreadyFollowed = metaData.followers.includes(viewerData.userName)
             const { token, id } = await generateToken()
@@ -79,54 +85,51 @@ const page = ({ params }) => {
             if (res.success) {
                 window.location.reload()
             } else {
-                alert(res.message)
+                toast({
+                    description: `❌ ${res.message}`,
+                })
             }
         }
     }
     return (
-        <div>
-            <div className='h-screen flex flex-col items-center'>
-                <div className=' w-full h-[30%] flex items-center'>
-                    <div className='icon h-40 w-40 bg-black absolute ml-20 rounded-full z-40'>
-                        <img src={metaData?.pic || "NA"} alt="User Photo" className='h-full w-full rounded-full' />
-                    </div>
-                    <div className='banner w-full h-full bg-blue-700'>
-                        <img src={metaData?.banner || "NA"} alt='Banner' className='w-full h-full' />
-                    </div>
+        <div className='h-screen flex flex-col items-center'>
+           <div className="w-full md:h-[30%] h-[40%] flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${metaData?.banner || "NA"})` }}>
+                <div className='icon h-40 w-40 bg-black rounded-full z-30'>
+                    <img src={metaData?.pic || "NA"} alt="User Photo" className='h-full w-full rounded-full' />
                 </div>
-                <div className=' w-full h-[17%]'>
-                    <ul className='m-6'>
-                        <li className='text-xl'>Name:<strong>&nbsp;{metaData?.fullName || "NA"}</strong></li>
-                        <li className='text-xl'>Profession:<strong>&nbsp;{metaData?.profession || "NA"}</strong></li>
-                        <li className='text-xl'>Description:<strong>&nbsp;{metaData?.description || "NA"}</strong></li>
-                    </ul>
-                </div>
-                <Button varient="outline" onClick={handleFollowAndUnfollow}>{(metaData && (metaData.followers?.includes(viewerData.userName) ? "Unfollow" : "Follow")) || ""}</Button>
+            </div>
+            <div className=' w-full h-[17%]'>
+                <ul className='md:m-6 m-2'>
+                    <li className='text-xl'>Name:<strong>&nbsp;{metaData?.fullName || "NA"}</strong></li>
+                    <li className='text-xl'>Profession:<strong>&nbsp;{metaData?.profession || "NA"}</strong></li>
+                    <li className='text-xl'>Description:<strong>&nbsp;{metaData?.description || "NA"}</strong></li>
+                </ul>
+            </div>
+            <Button variant="outline" onClick={handleFollowAndUnfollow}>{(metaData && (metaData.followers?.includes(viewerData.userName) ? "Unfollow" : "Follow")) || ""}</Button>
 
-                <div className=' w-full h-[5%]'>
-                    <ul className='flex gap-6 items-center w-full h-full ml-6'>
-                        <Link href=""><strong>{metaData?.followers?.length || "0"}</strong>&nbsp;Followers</Link>
-                        <Link href=""><strong>{metaData?.followings?.length || "0"}</strong>&nbsp;Following</Link>
-                    </ul>
-                </div>
-                <div className='w-full border-t flex flex-wrap justify-center mt-1'>
-                    {posts.length > 0 ? (posts.map((item) => {
-                        return (
-                            <div key={item.uid} className='border h-32 w-96 my-5 mx-20 rounded-lg flex flex-col justify-center overflow-x-auto items-center gap-5 relative'>
-                                <Link href={`http://localhost:3000/post/${item.uid}`} className='font-bold text-lg px-8'>{item.title}</Link>
-                                <div>{item.category}</div>
-                                <div className='absolute top-0 right-0'>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger><EllipsisVertical /></DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuItem onClick={() => { navigator.clipboard.writeText(`localhost:3000/post/${item.uid}`); toast({ description: `✅ Copied` }); }}>Save Link<Link2Icon /></DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </div>
+            <div className=' w-full h-[5%]'>
+                <ul className='flex gap-6 items-center w-full h-full ml-6'>
+                    <Link href=""><strong>{metaData?.followers?.length || "0"}</strong>&nbsp;Followers</Link>
+                    <Link href=""><strong>{metaData?.followings?.length || "0"}</strong>&nbsp;Following</Link>
+                </ul>
+            </div>
+            <div className='w-full border-t flex flex-wrap justify-center mt-1'>
+                {posts.length > 0 ? (posts.map((item) => {
+                    return (
+                        <div key={item.uid} className='border h-32 w-96 my-5 md:mx-20 mx-1 rounded-lg flex flex-col justify-center overflow-x-auto items-center gap-5 relative'>
+                            <Link href={`http://localhost:3000/post/${item.uid}`} className='font-bold text-lg px-8'>{item.title}</Link>
+                            <div>{item.category}</div>
+                            <div className='absolute top-0 right-0'>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger><EllipsisVertical /></DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem onClick={() => { navigator.clipboard.writeText(`localhost:3000/post/${item.uid}`); toast({ description: `✅ Copied` }); }}>Save Link<Link2Icon /></DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
-                        )
-                    })) : <p className='m-2'>No post was created</p>}
-                </div>
+                        </div>
+                    )
+                })) : <p className='m-2'>No post was created</p>}
             </div>
         </div>
     )

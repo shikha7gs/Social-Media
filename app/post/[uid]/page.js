@@ -10,8 +10,10 @@ import { unified } from 'unified'
 import rehypePrettyCode from "rehype-pretty-code";
 import { transformerCopyButton } from '@rehype-pretty/transformers'
 import Link from "next/link"
+import { useToast } from "@/hooks/use-toast"
 
 const page = ({ params }) => {
+  const { toast } = useToast()
   const [data, setData] = useState()
   const [htmlContent, setHtmlContent] = useState("")
   const [viewerData, setViewerData] = useState()
@@ -46,7 +48,9 @@ const page = ({ params }) => {
         setViewer(res.data.userName, res.data.posts[0].uid, viewerUserName)
         setData(res.data)
       } else {
-        alert("not done")
+        toast({
+          description: `❌ Something broke`,
+        })
       }
     }
     const getViewetData = async () => {
@@ -69,11 +73,13 @@ const page = ({ params }) => {
   }, [])
 
   function parseISOString(s) {
-    if (data) {
+    if (s) {
       var b = s.split(/\D+/);
-      return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6])).toString()
+      let date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
+      return date.toISOString().slice(0, 19).replace('T', ' ');
     }
   }
+  
   useEffect(() => {
     if (data?.posts[0].description) {
       const processData = async () => {
@@ -118,17 +124,21 @@ const page = ({ params }) => {
         if (res.success) {
           window.location.reload()
         } else {
-          alert(res.message)
+          toast({
+            description: `❌ ${res.message}`,
+          })
         }
       } else {
-        alert("Firstly log in")
+        toast({
+          description: `❌ Firstly log in`,
+        })
       }
     }
   }
 
   return (
     <div className="max-w-6xl flex flex-col items-center mx-auto p-4">
-      <h1 className="text-4xl mt-12 font-bold mb-4">{data?.posts[0]?.title || " "}</h1>
+      <h1 className="md:text-4xl text-3xl text-center mt-12 font-bold mb-4">{data?.posts[0]?.title || " "}</h1>
       <div className="flex gap-2">
         <Link href={`http://localhost:3000/profile/${data?.userName}` || " "} className="text-sm text-gray-500 mb-4 italic">By {data?.userName || " "}</Link>
         <p className="text-sm text-gray-500 mb-4">{parseISOString(data?.createdAt) || " "}</p>
