@@ -111,8 +111,8 @@ const page = () => {
             </div>
             <div className=' w-full h-[5%]'>
                 <ul className='flex gap-6 items-center w-full h-full ml-6'>
-                    <Link href=""><strong>{userData?.followers?.length || "0"}</strong>&nbsp;Followers</Link>
-                    <Link href=""><strong>{userData?.followings?.length || "0"}</strong>&nbsp;Following</Link>
+                    <Link href="/user/profile/ff"><strong>{userData?.followers?.length || "0"}</strong>&nbsp;Followers</Link>
+                    <Link href="/user/profile/ff"><strong>{userData?.followings?.length || "0"}</strong>&nbsp;Following</Link>
                     <Link className='hover:bg-gray-100 p-1 border rounded-lg' href="/user/profile/modify">Modify</Link>
                 </ul>
             </div>

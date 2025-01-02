@@ -34,7 +34,7 @@ export async function POST(req) {
             getMetaData.save()
             // remove following in to
             const getMetaDataFrom = await MetaData.findOne({ userName: From })
-            getMetaDataFrom.followings = getMetaData.followings.filter(following => following !== To)
+            getMetaDataFrom.followings = getMetaDataFrom.followings.filter(following => following !== To)
             getMetaDataFrom.save()
             console.log("Unfollowed to", To, "By", From)
             return NextResponse.json({ success: true })

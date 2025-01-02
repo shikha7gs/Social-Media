@@ -50,3 +50,7 @@
  ### Feed
   - In home user could see posts as reels.
   - When page reloads in calls - `app\api\user\getRecommendPosts\route.js` , Under it , it firstly get user details and see what user likes, which category then show such post, It prioritize same category post of followings than rest similar category post. Ater getting category it brings the post and shows.
+
+ ### Followers and Followings page
+ - in \user\profile\ff , user could see its followings and followers and could customize.
+ - When user click on unfollow or remove, it send request in /api/other/unfollowOrRemove which will take action(unfollow or remove) , to(other) and from(username), if action is unfollow it will remove `from` from `to` followers and remove `to` from `from` followings or else if action is remove, it will remove `to` from `from` followers and remove `from` from `to` followings
