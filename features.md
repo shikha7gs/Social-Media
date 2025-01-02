@@ -49,4 +49,4 @@
  
  ### Feed
   - In home user could see posts as reels.
-  - When page reloads in calls - `app\api\user\getRecommendPosts\route.js` , Under it , it firstly gget user details and see what user likes, which category then show such post, It prioritize same category post of followings than rest same category post. Ater getting category it brings thepost and shows.
+  - When page reloads in calls - `app\api\user\getRecommendPosts\route.js` , Under it , it firstly get user details and see what user likes, which category then show such post, It prioritize same category post of followings than rest similar category post. Ater getting category it brings the post and shows.
