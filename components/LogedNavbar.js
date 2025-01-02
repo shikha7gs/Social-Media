@@ -1,3 +1,4 @@
+import { Search } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -8,6 +9,7 @@ export const LogedNavbar = () => {
       <ul className='mx-5 gap-5 flex'>
         <Link href={'/'}>Feed</Link>
         <Link href={'/user/profile'}>Profile</Link>
+        <Link href={'/search'}><Search/></Link>
       </ul>
     </nav>
   )

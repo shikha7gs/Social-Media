@@ -57,3 +57,7 @@
 
  ### Added navbar
  - Added different navbar for login and logged out user.
+
+ ### Search
+ - User could search posts(by title) or account(by username) to connect with more people.\
+ - When user come at- /search The website will verify wether user is authenticated or not. User could select type(account or post) and write the quesry and when it clicks at btn, handleSubmit will trigger which will call api - /search, here it will search the username include in account and uid in post then reyurn probrabilities arr.
