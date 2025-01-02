@@ -95,7 +95,7 @@ const page = () => {
     return (
         <div className='h-screen flex flex-col items-center'>
             <div className=' w-full h-[30%] flex items-center'>
-                <div className='icon h-40 w-40 bg-black absolute ml-20 rounded-full z-50'>
+                <div className='icon h-40 w-40 bg-black absolute ml-20 rounded-full z-40'>
                     <img src={userData?.pic || "NA"} alt="User Photo" className='h-full w-full rounded-full' />
                 </div>
                 <div className='banner w-full h-full bg-blue-700'>

@@ -128,7 +128,7 @@ const page = ({ params }) => {
 
   return (
     <div className="max-w-6xl flex flex-col items-center mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-4">{data?.posts[0]?.title || " "}</h1>
+      <h1 className="text-4xl mt-12 font-bold mb-4">{data?.posts[0]?.title || " "}</h1>
       <div className="flex gap-2">
         <Link href={`http://localhost:3000/profile/${data?.userName}` || " "} className="text-sm text-gray-500 mb-4 italic">By {data?.userName || " "}</Link>
         <p className="text-sm text-gray-500 mb-4">{parseISOString(data?.createdAt) || " "}</p>
