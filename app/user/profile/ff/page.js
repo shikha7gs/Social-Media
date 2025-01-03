@@ -41,7 +41,6 @@ const page = () => {
                             return
                         }
                         setUserData(userDetailsResult?.data)
-                        console.log(userDetailsResult?.data)
                         return
                     } else {
                         toast({ description: `❌ ${userDetailsResult.message}` });

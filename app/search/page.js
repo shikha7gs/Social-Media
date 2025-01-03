@@ -37,7 +37,6 @@ const page = () => {
             })
             const res = await req.json()
             if (res.success) {
-                console.log()
                 setResult({ array: res.result, type: res.type })
             } else {
                 toast({

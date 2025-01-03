@@ -17,7 +17,6 @@ export async function POST(req) {
         // Task find posts basewd on UID and return in array
         await connectDb()
         const postDB = await Post.find({})
-        // console.log(postDB)
         let finalPosts = []
         await uidArr.map((uid) => {
             const result = postDB.map(item => {

@@ -35,7 +35,6 @@ const page = () => {
                 const sessionResult = await sessionResponse.json();
 
                 if (sessionResult.success) {
-                    console.log(sessionResult.userDetails);
                     const { token, id } = await generateToken()
                     const userDetailsResponse = await fetch("/api/user/fetchUserDetails", {
                         method: "POST",

@@ -61,7 +61,6 @@ const page = () => {
   const onSubmitOtp = async (e) => {
     e.preventDefault()
     setWait(true)
-    console.log(otp)
     const { token, id } = await generateToken()
     const req1 = await fetch("/api/account/forgetPassword/verifyOtpAndLogTheUser", {
       method: "POST",
@@ -96,10 +95,7 @@ const page = () => {
       })
       const res1 = await req1.json()
       if (res1.authenticated) {
-        console.log("live")
         router.push("/user/profile")
-      } else {
-        console.log("leave")
       }
     })()
   }, [])

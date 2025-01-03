@@ -19,7 +19,6 @@ const page = ({ params }) => {
   const [viewerData, setViewerData] = useState()
 
   const setViewer = async (userName, Uid, viewerUserName) => {
-    console.log(userName, Uid, viewerUserName)
     const setThings = await fetch("/api/user/setViewer", {
       method: "POST",
       headers: {
@@ -28,7 +27,6 @@ const page = ({ params }) => {
       body: JSON.stringify({ userName, Uid, viewerUserName })
     })
     const setThingsResponse = await setThings.json()
-    console.log(setThingsResponse)
   }
 
   useEffect(() => {
@@ -99,7 +97,6 @@ const page = ({ params }) => {
             ],
           })
         const content = (await processor.process(data?.posts[0].description)).toString()
-        console.log(content)
         setHtmlContent(content)
       }
       processData()

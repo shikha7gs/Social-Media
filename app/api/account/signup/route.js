@@ -47,7 +47,6 @@ export async function POST(params) {
         await newUser.save()
         return NextResponse.json({ success: true })
     } catch (error) {
-        console.log(error.message)
         return NextResponse.json({ success: false, message: "Something went wrong" })
     }
 }

@@ -18,7 +18,6 @@ export async function POST(req) {
         if (To == From) return NextResponse.json({ success: false, message: "Can't follow to ourself" })
         if (!alreadyFollowed) {
             // add follower in to
-            console.log("Followed to", To, "By", From)
             const getMetaData = await MetaData.findOne({ userName: To })
             getMetaData.followers.push(From)
             await getMetaData.save()
@@ -37,7 +36,6 @@ export async function POST(req) {
             const getMetaDataFrom = await MetaData.findOne({ userName: From })
             getMetaDataFrom.followings = getMetaDataFrom.followings.filter(following => following !== To)
             getMetaDataFrom.save()
-            console.log("Unfollowed to", To, "By", From)
             return NextResponse.json({ success: true })
         }
     } catch (error) {

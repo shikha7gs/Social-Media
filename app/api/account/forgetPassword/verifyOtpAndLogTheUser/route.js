@@ -21,7 +21,6 @@ export async function POST(req) {
         if (!verifyOtp) return NextResponse.json({ success: false, message: "Otp is expired, try again" })
         if (otp != verifyOtp.otp) return NextResponse.json({ success: false, message: "Wrong otp entered" })
         await Otp.deleteOne({ uuid: uuid });
-        //console.log("verified ", emailOrUserName)
         const findUser = await User.findOne({
             $or: [
                 { email: emailOrUserName },
